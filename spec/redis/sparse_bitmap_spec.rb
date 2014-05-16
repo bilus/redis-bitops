@@ -223,4 +223,24 @@ describe Redis::SparseBitmap do
       result.bitcount.should == 4
     end
   end
+  
+  describe "#delete!" do
+    it "removes all bitmap's keys" do
+      a[0] = true
+      a[10_000] = true
+      a.delete!
+      redis.keys.should be_empty
+    end
+    
+    it "effectively sets all bitmap's keys to zero" do
+      a[0] = true
+      a[10_000] = true
+      a.delete!
+      a[0].should be_false
+      a[10_000].should be_false
+      b[0] = true
+      result << (a & b)
+      result.bitcount.should == 0
+    end
+  end
 end

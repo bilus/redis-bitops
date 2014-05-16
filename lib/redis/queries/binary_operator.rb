@@ -13,6 +13,7 @@ class Redis
       end
             
       def materialize(dest)
+
         result = dest
         mlhs, dest_used = resolve_operand(@lhs, result)
         temp_result = temp_bitmap(dest.redis) if dest_used
@@ -20,7 +21,7 @@ class Redis
         mrhs, = resolve_operand(@rhs, result)
         mlhs.bitop(@op, mrhs, dest)
       ensure
-        # temp_result.delete if temp_result
+        temp_result.delete! if temp_result
       end
     end
   end

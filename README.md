@@ -1,9 +1,12 @@
 TODO +1h
 
 + Support bitwise operators.
-- Support nested expressions.
-- Delete temp variables.
++ Support nested expressions.
++ Delete temp variables.
+   
+- Get rid of <<, use assignment and lazy-resolve the expression on method_missing.
 - Optimise the tree by combining operators.
+- Extract flushall used in specs. Delete only keys with given prefix/namespace for specs.
 - (Maybe) make it possible to do $redis.sparse_bitmap(key) and $redis.bitmap(key).
 - Document all methods and classes.
 - Use chunks. If possible extract Bitmap.

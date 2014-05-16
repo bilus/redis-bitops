@@ -30,6 +30,10 @@ class Redis
     def bitcount
       @redis.bitcount(@root_key)
     end
+    
+    def delete!
+      @redis.del(@root_key)
+    end
         
     def bitop(op, *bms, dest_bitmap)
       @redis.bitop(op, dest_bitmap.root_key, self.root_key, *bms.map(&:root_key))
