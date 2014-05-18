@@ -1,16 +1,12 @@
 require 'spec_helper'
 
-describe Redis::SparseBitmap do
+describe Redis::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rsb:" do
   let(:redis) { Redis.new }
   let(:a) { Redis::SparseBitmap.new("rsb:a", redis) }
   let(:b) { Redis::SparseBitmap.new("rsb:b", redis) }
   let(:c) { Redis::SparseBitmap.new("rsb:c", redis) }
   let(:result) { Redis::SparseBitmap.new("rsb:output", redis) }
 
-  after do
-    redis.flushdb
-  end
-  
   describe "#[]" do
     it "sets individual bits" do
       b[0] = true

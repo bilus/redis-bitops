@@ -4,7 +4,7 @@ TODO +1h
 + Support nested expressions.
 + Delete temp variables.
 + Optimise the tree by combining operators.
-- Extract flushall used in specs. Delete only keys with given prefix/namespace for specs.
++ Extract flushall used in specs. Delete only keys with given prefix/namespace for specs.
 - (Maybe) make it possible to do $redis.sparse_bitmap(key) and $redis.bitmap(key).
 - Get rid of <<, use assignment and lazy-resolve the expression on method_missing.
 - Document all methods and classes.
