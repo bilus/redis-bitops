@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe Redis::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rsb:" do
   let(:redis) { Redis.new }
-  let(:a) { Redis::SparseBitmap.new("rsb:a", redis) }
-  let(:b) { Redis::SparseBitmap.new("rsb:b", redis) }
-  let(:c) { Redis::SparseBitmap.new("rsb:c", redis) }
-  let(:result) { Redis::SparseBitmap.new("rsb:output", redis) }
+  let(:a) { redis.sparse_bitmap("rsb:a") }
+  let(:b) { redis.sparse_bitmap("rsb:b") }
+  let(:c) { redis.sparse_bitmap("rsb:c") }
+  let(:result) { redis.sparse_bitmap("rsb:output") }
 
   describe "#[]" do
     it "sets individual bits" do
@@ -256,6 +256,17 @@ describe Redis::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rsb:" do
       
       result << (a & (a & b) | c & b & a)
       result.bitcount.should == 3
+    end
+  end
+  
+  describe "Redis#sparse_bitmap" do
+    it "creates a new sparse bitmap" do
+      redis.sparse_bitmap("rsb:xxx").is_a? Redis::SparseBitmap
+    end
+    
+    it "doesn't add keys until the bitmap is modified" do
+      expect { redis.sparse_bitmap("rsb:xxx") }.to_not change { redis.keys.size }
+      expect { redis.sparse_bitmap("rsb:xxx")[1] = true }.to change { redis.keys.size }
     end
   end
 end

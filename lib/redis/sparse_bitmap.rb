@@ -5,6 +5,10 @@ require 'redis/queries/binary_operator'
 require 'redis/queries/unary_operator'
 
 class Redis
+  def sparse_bitmap(key)
+    SparseBitmap.new(key, self)
+  end
+  
   class SparseBitmap
     
     include Queries
