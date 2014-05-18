@@ -67,7 +67,7 @@ describe Redis::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rsb:" do
       
       q = a & b
       
-      result << q
+      result =~ q
       result.bitcount.should == 2
     end
     
@@ -85,7 +85,7 @@ describe Redis::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rsb:" do
       
       q = a & b & (c & a)
       
-      result << q
+      result =~ q
       result.bitcount.should == 1
     end
   end
@@ -103,7 +103,7 @@ describe Redis::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rsb:" do
       
       q = a | b
       
-      result << q
+      result =~ q
       result.bitcount.should == 5
     end    
 
@@ -121,7 +121,7 @@ describe Redis::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rsb:" do
       
       q = a | b | (c | a)
       
-      result << q
+      result =~ q
       result.bitcount.should == 5
     end
   end
@@ -135,7 +135,7 @@ describe Redis::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rsb:" do
       
       q = ~a
       
-      result << q
+      result =~ q
       result[0].should be_false
       result[1].should be_false
       result[2].should be_false
@@ -158,7 +158,7 @@ describe Redis::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rsb:" do
       
       q = ~a | b & c
       
-      result << q
+      result =~ q
       result[0].should be_true
       result[1].should be_false
       result[2].should be_false
@@ -179,7 +179,7 @@ describe Redis::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rsb:" do
       
       q = ~a
       
-      result << q
+      result =~ q
       result.bitcount.should == 96
     end
   end
@@ -197,7 +197,7 @@ describe Redis::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rsb:" do
       
       q = a ^ b
       
-      result << q
+      result =~ q
       result.bitcount.should == 3
     end    
 
@@ -215,7 +215,7 @@ describe Redis::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rsb:" do
       
       q = a ^ (b ^ c)
       
-      result << q
+      result =~ q
       result.bitcount.should == 4
     end
   end
@@ -225,7 +225,7 @@ describe Redis::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rsb:" do
       a[0] = true
       a[10_000] = true
       a.delete!
-      redis.keys.should be_empty
+      redis.keys("rsb:*").should be_empty
     end
     
     it "effectively sets all bitmap's keys to zero" do
@@ -235,13 +235,13 @@ describe Redis::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rsb:" do
       a[0].should be_false
       a[10_000].should be_false
       b[0] = true
-      result << (a & b)
+      result =~ a & b
       result.bitcount.should == 0
     end
   end
   
-  describe "#<<" do
-    it "materializes an arbitrarily-complicated expression" do
+  describe "#=~" do
+    before do
       a[0] = true
       a[1] = true
       a[2] = true
@@ -253,15 +253,23 @@ describe Redis::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rsb:" do
 
       c[0] = true
       c[1] = true
-      
-      result << (a & (a & b) | c & b & a)
+    end
+    
+    it "materializes an arbitrarily-complicated expression" do
+      result =~ (a & (a & b) | c & b & a)
+      result.bitcount.should == 3
+    end
+    
+    it "is lazy-invoked when expression is evaluated" do
+      result = (a & (a & b) | c & b & a)
+      result.should be_a Redis::Queries::BinaryOperator
       result.bitcount.should == 3
     end
   end
   
   describe "Redis#sparse_bitmap" do
     it "creates a new sparse bitmap" do
-      redis.sparse_bitmap("rsb:xxx").is_a? Redis::SparseBitmap
+      redis.sparse_bitmap("rsb:xxx").should be_a Redis::SparseBitmap
     end
     
     it "doesn't add keys until the bitmap is modified" do

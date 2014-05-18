@@ -19,7 +19,7 @@ class Redis
       @root_key = root_key
     end
     
-    def << (query)
+    def =~ (query)
       query.optimize!
       query.materialize(self)
     end

@@ -10,7 +10,7 @@ class Redis
         @args = [lhs, rhs]
         @op = op
       end
-            
+      
       def materialize(dest)
         # Resolve lhs and rhs operand, using 'dest' to store intermediate result so
         # a maximum of one temporary Bitmap has to be created.
@@ -33,12 +33,7 @@ class Redis
       end
       
       def optimize!(parent_op = nil)
-        # ap "#{@op}"
-        # ap "before-" * 10
-        # ap @args
         @args.map! { |arg| arg.respond_to?(:optimize!) ? arg.optimize!(@op) : arg }.flatten!
-        # ap "after-" * 10
-        # ap @args
         if parent_op == @op
           @args
         else
