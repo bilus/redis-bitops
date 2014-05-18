@@ -243,4 +243,23 @@ describe Redis::SparseBitmap do
       result.bitcount.should == 0
     end
   end
+  
+  describe "#<<" do
+    it "materializes an arbitrarily-complicated expression" do
+      a[0] = true
+      a[1] = true
+      a[2] = true
+      a[3] = true
+      
+      b[0] = true
+      b[1] = true
+      b[2] = true
+
+      c[0] = true
+      c[1] = true
+      
+      result << (a & (a & b) | c & b & a)
+      result.bitcount.should == 3
+    end
+  end
 end

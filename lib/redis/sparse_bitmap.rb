@@ -16,6 +16,7 @@ class Redis
     end
     
     def << (query)
+      query.optimize!
       query.materialize(self)
     end
     

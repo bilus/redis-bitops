@@ -1,12 +1,17 @@
 class Redis
   module Queries
     module MaterializationHelpers
-      def resolve_operand(o, result)
+      def resolve_operand(o, redis, intermediate, temp_intermediates)
         if o.respond_to?(:materialize)
-          o.materialize(result)
-          [result, true]
+          if intermediate.nil?
+            new_intermediate = temp_bitmap(redis) 
+            temp_intermediates << new_intermediate
+          end
+          intermediate ||= new_intermediate
+          o.materialize(intermediate)
+          [intermediate, nil]
         else
-          [o, false]
+          [o, intermediate]
         end
       end
       
