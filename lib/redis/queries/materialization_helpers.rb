@@ -11,10 +11,10 @@ class Redis
       # unless the latter is nil. In that case, a temp intermediate bitmap is created to hold 
       # the result (and the bitmap is added to 'temp_intermediates').
       #
-      def resolve_operand(o, redis, intermediate, temp_intermediates)
+      def resolve_operand(o, intermediate, temp_intermediates)
         if o.respond_to?(:materialize)
           if intermediate.nil?
-            new_intermediate = temp_bitmap(redis) 
+            new_intermediate = temp_bitmap
             temp_intermediates << new_intermediate
           end
           intermediate ||= new_intermediate
@@ -25,10 +25,10 @@ class Redis
         end
       end
       
-      # Creates a temp bitmap in 'redis'.
+      # Creates a temp bitmap.
       #
-      def temp_bitmap(redis)
-        SparseBitmap.new(unique_key, redis)
+      def temp_bitmap
+        bitmap_factory.call(unique_key)
       end
       
       # Generates a random unique key. 
@@ -39,6 +39,10 @@ class Redis
       #
       def unique_key
         "redis_sparse_bitmap:#{SecureRandom.hex(20)}"
+      end
+      
+      def bitmap_factory
+        raise "Override in the class using the module to return the bitmap factory."
       end
     end
   end

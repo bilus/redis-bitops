@@ -39,13 +39,13 @@ class Redis
     # Reads bit at position 'pos' returning a boolean.
     #
     def [] (pos)
-      i2b(@redis.getbit(key(pos), pos))
+      i2b(@redis.getbit(key(pos), offset(pos)))
     end
     
     # Sets bit at position 'pos' to 1 or 0 based on the boolean 'b'.
     #
     def []= (pos, b)
-      @redis.setbit(key(pos), pos, b2i(b))
+      @redis.setbit(key(pos), offset(pos), b2i(b))
     end
     
     # Returns the number of set bits.
@@ -74,16 +74,20 @@ class Redis
       @root_key
     end
     
-    # The redis connection.
+    # Returns lambda creating Bitmap objects using @redis as the connection.
     #
-    def redis
-      @redis
+    def bitmap_factory
+      lambda { |key| @redis.bitmap(key) }
     end
     
     protected
     
     def key(pos)
       @root_key
+    end
+    
+    def offset(pos)
+      pos
     end
     
     def b2i(b)

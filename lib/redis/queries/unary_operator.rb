@@ -20,7 +20,7 @@ class Redis
       #
       def materialize(dest)
         temp_intermediates = []
-        result, = resolve_operand(@arg, dest.redis, dest, temp_intermediates)
+        result, = resolve_operand(@arg, dest, temp_intermediates)
         result.bitop(@op, dest)
       ensure
         temp_intermediates.each(&:delete!)
@@ -35,11 +35,11 @@ class Redis
         self
       end
       
-      # Finds a redis connection in the expression tree.
-      # Required by LazyEvaluation.
+      # Finds the first bitmap factory in the expression tree.
+      # Required by LazyEvaluation and MaterializationHelpers.
       #
-      def redis
-        @arg.redis or raise "Internal error. Cannot get redis connection."
+      def bitmap_factory
+        @arg.bitmap_factory or raise "Internal error. Cannot get redis connection."
       end
     end
   end

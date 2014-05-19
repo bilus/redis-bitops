@@ -128,7 +128,7 @@ shared_examples_for "a bitmap" do |creation_method|
       a[1] = true
       a[2] = true
       a[100] = true
-      
+
       q = ~a
       
       result << q
@@ -165,19 +165,23 @@ shared_examples_for "a bitmap" do |creation_method|
       result[110].should be_false
       result[111].should be_true
     end
+
+    # Commented out because this is how redis BITOP NOT works:
+    # it pads the results to the full byte thus messing up with
+    # the operation. 
     
-    it "returns result with the correct bitcount" do
-      pending
-      a[0] = true
-      a[1] = true
-      a[2] = true
-      a[100] = true
-      
-      q = ~a
-      
-      result << q
-      result.bitcount.should == 96
-    end
+    # it "returns result with the correct bitcount" do
+    #   pending
+    #   a[0] = true
+    #   a[1] = true
+    #   a[2] = true
+    #   a[100] = true
+    #   
+    #   q = ~a
+    #   
+    #   result << q
+    #   result.bitcount.should == 96
+    # end
   end
   
   describe "#operator ^" do

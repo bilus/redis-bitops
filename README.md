@@ -11,8 +11,11 @@ TODO +1h
 + Lazy evaluation of expression to make it possible to use straight assignment.
 + Rename the =~ operator back to more intuitive <<.
 + Create Bitmap class sharing the specs.
++ Extract Bitmap.
++ Implement SparseBitmap using chunks.
++ Make chunk size configurable.
++ Write specs for edge conditions.
 - Get rid of duplicate require's.
-- Use chunks. If possible extract Bitmap.
 - Make materialization optionally atomic.
 - Refactor the code.
 

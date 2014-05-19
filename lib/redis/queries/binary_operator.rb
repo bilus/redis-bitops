@@ -24,16 +24,16 @@ class Redis
         # Resolve lhs and rhs operand, using 'dest' to store intermediate result so
         # a maximum of one temporary Bitmap has to be created.
         # Then apply the bitwise operator storing the final result in 'dest'.
-        redis = dest.redis
+
         intermediate = dest
         
         lhs, *other_args = @args
         temp_intermediates = []
         
         # Side-effects: if a temp intermediate bitmap is created, it's added to 'temp_intermediates'.
-        lhs_operand, intermediate = resolve_operand(lhs, redis, intermediate, temp_intermediates) # Side-effect possible. 
+        lhs_operand, intermediate = resolve_operand(lhs, intermediate, temp_intermediates) # Side-effect possible. 
         other_operands, *_ = other_args.inject([[], intermediate]) do |(operands, intermediate), arg|
-          operand, intermediate = resolve_operand(arg, redis, intermediate, temp_intermediates) # Side-effect possible.
+          operand, intermediate = resolve_operand(arg, intermediate, temp_intermediates) # Side-effect possible.
           [operands << operand, intermediate]
         end
         
@@ -55,12 +55,12 @@ class Redis
         end
       end
 
-      # Finds a redis connection in the expression tree.
-      # Required by LazyEvaluation.
+      # Finds the first bitmap factory  in the expression tree.
+      # Required by LazyEvaluation and MaterializationHelpers.
       #
-      def redis
-        arg = @args.find { |arg| arg.redis } or raise "Internal error. Cannot get redis connection."
-        arg.redis
+      def bitmap_factory
+        arg = @args.find { |arg| arg.bitmap_factory } or raise "Internal error. Cannot find a bitmap factory."
+        arg.bitmap_factory
       end
     end
   end
