@@ -1,12 +1,12 @@
 Gem::Specification.new do |s|
-  s.name        = 'redis_sparse_bitmap'
-  s.version     = '0.0.5'
-  s.summary     = "Redis sparse bitmaps"
-  s.description = "Redis sparse bitmaps"
+  s.name        = 'redis-bitops'
+  s.version     = '0.2'
+  s.summary     = "Bitmap and sparse bitmap operations for Redis."
+  s.description = "Optimized operations on Redis bitmaps using built-in operators. Supports sparse bitmaps to preserve storage."
   s.authors     = ["Martin Bilski"]
   s.email       = 'gyamtso@gmail.com'
   s.homepage    =
-    'http://github.com/bilus/redis_sparse_bitmap'
+    'http://github.com/bilus/redis-bitops'
   s.license       = 'MIT'
 
   s.files = Dir['README.md', 'MIT-LICENSE', 'lib/**/*', 'spec/**/*']
