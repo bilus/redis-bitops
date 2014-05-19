@@ -10,7 +10,8 @@ TODO +1h
 + Document all methods and classes.
 + Lazy evaluation of expression to make it possible to use straight assignment.
 + Rename the =~ operator back to more intuitive <<.
-
++ Create Bitmap class sharing the specs.
+- Get rid of duplicate require's.
 - Use chunks. If possible extract Bitmap.
 - Make materialization optionally atomic.
 - Refactor the code.

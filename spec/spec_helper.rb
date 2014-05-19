@@ -1,6 +1,9 @@
 $: << "../../lib"
 
 require 'redis/sparse_bitmap'
+require 'redis/bitmap'
+
+require_relative './support/bitmap_examples'
 
 require 'pry'
 require 'awesome_print'
