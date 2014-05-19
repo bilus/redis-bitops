@@ -15,6 +15,7 @@ class Redis
         if o.respond_to?(:materialize)
           if intermediate.nil?
             new_intermediate = temp_bitmap(redis) 
+            ap new_intermediate
             temp_intermediates << new_intermediate
           end
           intermediate ||= new_intermediate

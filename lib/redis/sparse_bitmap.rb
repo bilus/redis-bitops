@@ -1,6 +1,7 @@
 require 'redis'
 require 'redis/queries/materialization_helpers'
 require 'redis/queries/tree_building_helpers'
+require 'redis/queries/lazy_evaluation'
 require 'redis/queries/binary_operator'
 require 'redis/queries/unary_operator'
 
@@ -13,6 +14,8 @@ class Redis
   end
   
   # A sparse bitmap using multiple key to store its data to save memory.
+  #
+  # Note: When adding new public methods, revise the LazyEvaluation module.
   #
   class SparseBitmap
     
@@ -28,7 +31,7 @@ class Redis
     
     # Saves the result of the query in the bitmap.
     #
-    def =~ (query)
+    def << (query)
       query.optimize!
       query.materialize(self)
     end

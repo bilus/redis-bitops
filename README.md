@@ -7,12 +7,15 @@ TODO +1h
 + Extract flushall used in specs. Delete only keys with given prefix/namespace for specs.
 + Make it possible to do $redis.sparse_bitmap(key) and $redis.bitmap(key).
 + Get rid of <<, use assignment and lazy-resolve the expression on method_missing.
-- Document all methods and classes.
-- Try for 1 pomodoro to make it lazy.
++ Document all methods and classes.
++ Lazy evaluation of expression to make it possible to use straight assignment.
++ Rename the =~ operator back to more intuitive <<.
 
 - Use chunks. If possible extract Bitmap.
 - Make materialization optionally atomic.
 - Refactor the code.
+
+- YARD documentation.
 
 - Benchmark with reasonably large data.
 - Make chunk size configurable but find a reasonable size.

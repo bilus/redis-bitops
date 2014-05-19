@@ -6,6 +6,7 @@ class Redis
     class UnaryOperator
       include MaterializationHelpers
       include TreeBuildingHelpers
+      include LazyEvaluation
         
       # Create a new bitwise operator 'op' with one argument 'arg'.
       #
@@ -32,6 +33,13 @@ class Redis
       def optimize!(parent_op = nil)
         @arg.optimize!(@op) if @arg.respond_to?(:optimize!)
         self
+      end
+      
+      # Finds a redis connection in the expression tree.
+      # Required by LazyEvaluation.
+      #
+      def redis
+        @arg.redis or raise "Internal error. Cannot get redis connection."
       end
     end
   end

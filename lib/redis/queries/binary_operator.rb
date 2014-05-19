@@ -8,6 +8,7 @@ class Redis
     class BinaryOperator
       include MaterializationHelpers
       include TreeBuildingHelpers
+      include LazyEvaluation
      
       # Creates a bitwise operator 'op' with left-hand operand, 'lhs', and right-hand operand, 'rhs'.
       #
@@ -52,6 +53,14 @@ class Redis
         else
           self
         end
+      end
+
+      # Finds a redis connection in the expression tree.
+      # Required by LazyEvaluation.
+      #
+      def redis
+        arg = @args.find { |arg| arg.redis } or raise "Internal error. Cannot get redis connection."
+        arg.redis
       end
     end
   end

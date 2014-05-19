@@ -10,7 +10,6 @@ Gem::Specification.new do |s|
   s.license       = 'MIT'
 
   s.files = Dir['README.md', 'MIT-LICENSE', 'lib/**/*', 'spec/**/*']
-  s.has_rdoc = true
   
   s.add_dependency 'redis'
   s.add_dependency 'hiredis'
