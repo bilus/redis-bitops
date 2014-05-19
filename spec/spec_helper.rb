@@ -1,7 +1,6 @@
 $: << "../../lib"
 
-require 'redis/sparse_bitmap'
-require 'redis/bitmap'
+require 'redis/bitops'
 
 require_relative './support/bitmap_examples'
 

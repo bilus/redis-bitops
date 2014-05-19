@@ -15,9 +15,10 @@ TODO +1h
 + Implement SparseBitmap using chunks.
 + Make chunk size configurable.
 + Write specs for edge conditions.
-- Get rid of duplicate require's.
++ Get rid of duplicate require's.
 - Make materialization optionally atomic.
 - Refactor the code.
+- Make default chunk size configurable.
 
 - YARD documentation.
 

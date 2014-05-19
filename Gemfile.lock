@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    redis_sparse_bitmap (0.0.5)
+    redis-bitops (0.2)
       hiredis
       redis
 
@@ -68,5 +68,5 @@ DEPENDENCIES
   guard-rspec
   pry
   pry-byebug
-  redis_sparse_bitmap!
+  redis-bitops!
   rspec
