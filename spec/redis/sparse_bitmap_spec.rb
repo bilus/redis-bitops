@@ -49,13 +49,15 @@ describe Redis::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rsb:" do
   
     describe "#operator |" do 
       it "handles bits around chunk boundaries" do
-        (a | b).bitcount.should == 5
+        result << (a | b)
+        result.bitcount.should == 5
       end
     end
   
     describe "#operator &" do 
       it "handles bits around chunk boundaries" do
-        (a & b).bitcount.should == 3
+        result << (a & b)
+        result.bitcount.should == 3
       end
     end
   
@@ -75,7 +77,18 @@ describe Redis::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rsb:" do
   
     describe "#operator ^" do
       it "handles bits around chunk boundaries" do
-        (a ^ b).bitcount.should == 2
+        result << (a ^ b)
+        result.bitcount.should == 2
+      end
+    end
+
+    describe "#copy_to" do
+      it "overrides all chunks in the target bitmap" do
+        # Fix expression with bits set using [] after evaluation doesn't materialize the newly set bits.
+        result[4*bits_per_chunk + 1] = true
+        a.copy_to(result)
+        result.bitcount.should == a.bitcount
+        result[4*bits_per_chunk + 1].should be_false
       end
     end
   end

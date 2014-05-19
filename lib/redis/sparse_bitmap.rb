@@ -67,6 +67,27 @@ class Redis
     def bitmap_factory
       lambda { |key| @redis.sparse_bitmap(key, @bytes_per_chunk) }
     end
+    
+    # Copy this bitmap to 'dest' bitmap.
+    #
+    def copy_to(dest)
+      
+      # Copies all source chunks to destination chunks and deletes remaining destination chunk keys.
+      
+      source_keys = self.chunk_keys
+      dest_keys = dest.chunk_keys
+
+      maybe_multi(level: :bitmap, watch: source_keys + dest_keys) do
+        source_chunks = Set.new(chunk_numbers(source_keys))
+        source_chunks.each do |i|
+          copy(chunk_key(i), dest.chunk_key(i))
+        end
+        dest_chunks = Set.new(chunk_numbers(dest_keys))
+        (dest_chunks - source_chunks).each do |i|
+          @redis.del(dest.chunk_key(i))
+        end
+      end
+    end
 
     protected
     

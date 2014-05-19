@@ -21,9 +21,24 @@ class Redis
       def dest
         if @dest.nil?
           @dest = temp_bitmap
-          evaluate(@dest)
+          do_evaluate(@dest)
         end
         @dest
+      end
+
+      # Optimizes the expression and materializes it into bitmap 'dest'.
+      #
+      def evaluate(dest_bitmap)
+        if @dest
+          @dest.copy_to(dest_bitmap)
+        else
+          do_evaluate(dest_bitmap)
+        end
+      end
+      
+      protected def do_evaluate(dest_bitmap)
+        optimize!
+        materialize(dest_bitmap)
       end
     end
   end

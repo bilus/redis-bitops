@@ -1,4 +1,4 @@
-TODO +1h
+TODO +1.5h
 
 + Support bitwise operators.
 + Support nested expressions.
@@ -18,15 +18,10 @@ TODO +1h
 + Get rid of duplicate require's.
 + Make materialization atomic (configurable).
 + Make default chunk size configurable.
-- Fix expression with bits set using [] after evaluation doesn't materialize the newly set bits.
-  c = a | b
-  c[3] = true
-  d = r.sparse_bitmap("c")
-  d << c
-  d[3].should be_true
++ Fix expression with bits set using [] after evaluation doesn't materialize the newly set bits.
 - Refactor the code. Fix the namespaces.
 
-- YARD documentation.
+- YARD/rdoc documentation.
 
 - Benchmark with reasonably large data.
 - Make chunk size configurable but find a reasonable size.

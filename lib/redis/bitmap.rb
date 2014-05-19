@@ -72,6 +72,12 @@ class Redis
       lambda { |key| @redis.bitmap(key) }
     end
         
+    # Copy this bitmap to 'dest' bitmap.
+    #
+    def copy_to(dest)
+      copy(root_key, dest.root_key)
+    end
+        
     protected
     
     def key(pos)
@@ -88,6 +94,18 @@ class Redis
     
     def i2b(i)
       i.to_i != 0 ? true : false
+    end
+    
+    COPY_SCRIPT = 
+      <<-EOS
+        redis.call("DEL", KEYS[2])
+        if redis.call("EXISTS", KEYS[1]) == 1 then
+          local val = redis.call("DUMP", KEYS[1])
+          redis.call("RESTORE", KEYS[2], 0, val)
+        end
+      EOS
+    def copy(source_key, dest_key)
+      @redis.eval(COPY_SCRIPT, [source_key, dest_key])      
     end
   end
 end

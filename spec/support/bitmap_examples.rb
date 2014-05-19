@@ -255,6 +255,10 @@ shared_examples_for "a bitmap" do |creation_method|
       c[1] = true
     end
     
+    after do
+      @temp.delete! if @temp
+    end
+    
     it "materializes an arbitrarily-complicated expression" do
       result << (a & (a & b) | c & b & a)
       result.bitcount.should == 3
@@ -263,7 +267,28 @@ shared_examples_for "a bitmap" do |creation_method|
     it "is lazy-invoked when expression is evaluated" do
       result = (a & (a & b) | c & b & a)
       result.should be_a Redis::Queries::BinaryOperator
+      @temp = result
       result.bitcount.should == 3
+    end
+    
+    it "takes into account modifications made to the result" do
+      output = (a & (a & b) | c & b & a)
+      output[100] = true
+      @temp = output
+      result << output
+      result.bitcount.should == 4
+    end
+  end
+  
+  describe "#copy_to" do
+    it "overrides the target bitmap" do
+      # Fix expression with bits set using [] after evaluation doesn't materialize the newly set bits.
+      result[1000] = true
+      a[0] = true
+      a[1] = true
+      a.copy_to(result)
+      result.bitcount.should == a.bitcount
+      result[1000].should be_false
     end
   end
 end
@@ -271,12 +296,18 @@ end
 shared_examples_for "a bitmap factory method"  do |creation_method, bitmap_class|
   let(:redis) { Redis.new }
 
+  after do
+    @bitmap.delete! if @bitmap
+  end
+
   it "creates a new bitmap" do
-    redis.send(creation_method, "rsb:xxx").should be_a bitmap_class
+    @bitmap = redis.send(creation_method, "rsb:xxx")
+    @bitmap.should be_a bitmap_class
   end
   
   it "doesn't add keys until the bitmap is modified" do
-    expect { redis.send(creation_method, "rsb:xxx") }.to_not change { redis.keys.size }
-    expect { redis.send(creation_method, "rsb:xxx")[1] = true }.to change { redis.keys.size }
+    @bitmap = redis.send(creation_method, "rsb:xxx")
+    expect { @bitmap }.to_not change { redis.keys.size }
+    expect { @bitmap[1] = true }.to change { redis.keys.size }
   end
 end

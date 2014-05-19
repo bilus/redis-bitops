@@ -28,7 +28,8 @@ class Redis
       # Creates a temp bitmap.
       #
       def temp_bitmap
-        bitmap_factory.call(unique_key)
+        bitmap = bitmap_factory.call(unique_key)
+        bitmap
       end
       
       # Generates a random unique key. 
