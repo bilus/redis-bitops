@@ -6,8 +6,9 @@ TODO +1h
 + Optimise the tree by combining operators.
 + Extract flushall used in specs. Delete only keys with given prefix/namespace for specs.
 + Make it possible to do $redis.sparse_bitmap(key) and $redis.bitmap(key).
-- Get rid of <<, use assignment and lazy-resolve the expression on method_missing.
++ Get rid of <<, use assignment and lazy-resolve the expression on method_missing.
 - Document all methods and classes.
+- Try for 1 pomodoro to make it lazy.
 
 - Use chunks. If possible extract Bitmap.
 - Make materialization optionally atomic.

@@ -1,7 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'redis_sparse_bitmap'
-  s.version     = '0.0.1'
-  s.date        = '2015-05-16'
+  s.version     = '0.0.5'
   s.summary     = "Redis sparse bitmaps"
   s.description = "Redis sparse bitmaps"
   s.authors     = ["Martin Bilski"]
@@ -11,7 +10,7 @@ Gem::Specification.new do |s|
   s.license       = 'MIT'
 
   s.files = Dir['README.md', 'MIT-LICENSE', 'lib/**/*', 'spec/**/*']
-  s.has_rdoc = false
+  s.has_rdoc = true
   
   s.add_dependency 'redis'
   s.add_dependency 'hiredis'
