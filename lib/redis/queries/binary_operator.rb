@@ -8,6 +8,7 @@ class Redis
     class BinaryOperator
       include MaterializationHelpers
       include TreeBuildingHelpers
+      include Evaluation
       include LazyEvaluation
      
       # Creates a bitwise operator 'op' with left-hand operand, 'lhs', and right-hand operand, 'rhs'.

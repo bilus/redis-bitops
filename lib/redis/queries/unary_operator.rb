@@ -6,6 +6,7 @@ class Redis
     class UnaryOperator
       include MaterializationHelpers
       include TreeBuildingHelpers
+      include Evaluation
       include LazyEvaluation
         
       # Create a new bitwise operator 'op' with one argument 'arg'.

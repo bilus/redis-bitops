@@ -16,15 +16,26 @@ TODO +1h
 + Make chunk size configurable.
 + Write specs for edge conditions.
 + Get rid of duplicate require's.
-- Make materialization optionally atomic.
-- Refactor the code.
-- Make default chunk size configurable.
++ Make materialization atomic (configurable).
++ Make default chunk size configurable.
+- Fix expression with bits set using [] after evaluation doesn't materialize the newly set bits.
+  c = a | b
+  c[3] = true
+  d = r.sparse_bitmap("c")
+  d << c
+  d[3].should be_true
+- Refactor the code. Fix the namespaces.
 
 - YARD documentation.
 
 - Benchmark with reasonably large data.
 - Make chunk size configurable but find a reasonable size.
-- Write readme. Write about 3 phases: tree building, optimization, materialization.
+
+- Write readme. 
+  - Write about 3 phases: tree building, optimization, materialization.
+  - <<
+  - Assignment and lazy evaluation.
+  - Configuration.
 - Publish the gem.
 - Search for places where ppl might need it and brag about it.
 - DOCUMENT OR FIX: Correctly handle NOT so it doesn't set the extra bits. Explain why it occurs (redis byte boundary) and how it can be worked around using AND (plus maybe mention that in the field it's used it doesn't matter because NOT "from google" has to AND it with "all visitors" or otherwise it won't make sense.)

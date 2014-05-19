@@ -32,10 +32,11 @@ class Redis
       end
       
       # Generates a random unique key. 
+      #
       # TODO: The key _should_ be unique and not repeat in the 
-      # database but this isn't guaranteed but considering the intended
-      # usage to create temporary intermediate bitmaps while materializing
-      # queries, it should be sufficient.
+      # database but this isn't guaranteed. Considering the intended usage though
+      # (creation of temporary intermediate bitmaps while materializing
+      # queries), it should be sufficient.
       #
       def unique_key
         "redis_sparse_bitmap:#{SecureRandom.hex(20)}"

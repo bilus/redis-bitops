@@ -14,12 +14,10 @@ class Redis
   #
   class SparseBitmap < Bitmap
     
-    DEFAULT_BYTES_PER_CHUNK = 4096
-    
     # Creates a new sparse bitmap stored in 'redis' under 'root_key'.
     #
     def initialize(root_key, redis, bytes_per_chunk = nil)
-      @bytes_per_chunk = bytes_per_chunk || DEFAULT_BYTES_PER_CHUNK
+      @bytes_per_chunk = bytes_per_chunk || Redis::Bitops.configuration.default_bytes_per_chunk
       super(root_key, redis)
     end
     
@@ -45,11 +43,13 @@ class Redis
       # TODO: Optimization is possible for AND. We can use an intersection of each operand
       # chunk numbers to minimize the number of database accesses.
       
-      unique_chunk_numbers = operands.inject(Set.new(chunk_numbers(self.chunk_keys))) { |set, o| 
-        set.merge(chunk_numbers(o.chunk_keys)) 
-      }
-      unique_chunk_numbers.each do |i|
-        @redis.bitop(op, result.chunk_key(i), self.chunk_key(i), *operands.map { |o| o.chunk_key(i) })
+      all_keys = self.chunk_keys + (operands.map(&:chunk_keys).flatten! || [])
+      unique_chunk_numbers = Set.new(chunk_numbers(all_keys))
+      
+      maybe_multi(level: :bitmap, watch: all_keys) do
+        unique_chunk_numbers.each do |i|
+          @redis.bitop(op, result.chunk_key(i), self.chunk_key(i), *operands.map { |o| o.chunk_key(i) })
+        end
       end
       result
     end
@@ -89,5 +89,20 @@ class Redis
     def chunk_numbers(keys)
       keys.map { |key| key.split(":").last.to_i }
     end
+    
+    # Maybe pipeline/make atomic based on the configuration.
+    #
+    def maybe_multi(options = {}, &block)
+      current_level = options[:level] or raise "Specify the current transaction level."
+      
+      if Redis::Bitops.configuration.transaction_level == current_level
+        watched_keys = options[:watch]
+        @redis.watch(watched_keys) if watched_keys
+        @redis.multi(&block)
+      else
+        block.call
+      end
+    end
+    
   end
 end

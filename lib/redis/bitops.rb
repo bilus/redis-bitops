@@ -1,8 +1,11 @@
 require 'redis'
 require 'redis/queries/materialization_helpers'
 require 'redis/queries/tree_building_helpers'
+require 'redis/queries/evaluation'
 require 'redis/queries/lazy_evaluation'
 require 'redis/queries/binary_operator'
 require 'redis/queries/unary_operator'
 require 'redis/bitmap'
 require 'redis/sparse_bitmap'
+
+require 'redis/bitops/configuration'

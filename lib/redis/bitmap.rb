@@ -25,8 +25,7 @@ class Redis
     # Saves the result of the query in the bitmap.
     #
     def << (query)
-      query.optimize!
-      query.materialize(self)
+      query.evaluate(self)
     end
     
     # Reads bit at position 'pos' returning a boolean.
@@ -72,7 +71,7 @@ class Redis
     def bitmap_factory
       lambda { |key| @redis.bitmap(key) }
     end
-    
+        
     protected
     
     def key(pos)

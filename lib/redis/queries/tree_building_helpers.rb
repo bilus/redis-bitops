@@ -5,6 +5,7 @@ class Redis
     # Add new logical operators here as/if they become supported by Redis' BITOP command.
     #
     module TreeBuildingHelpers
+      
       # Logical AND operator.
       #
       def & (rhs)
