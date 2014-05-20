@@ -2,7 +2,7 @@ Gem::Specification.new do |s|
   s.name        = 'redis-bitops'
   s.version     = '0.2'
   s.summary     = "Bitmap and sparse bitmap operations for Redis."
-  s.description = "Optimized operations on Redis bitmaps using built-in operators. Supports sparse bitmaps to preserve storage."
+  s.description = "Optimized operations on Redis bitmaps using built-in Ruby operators. Supports sparse bitmaps to preserve storage."
   s.authors     = ["Martin Bilski"]
   s.email       = 'gyamtso@gmail.com'
   s.homepage    =
