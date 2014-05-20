@@ -41,7 +41,7 @@ class Redis
         # queries), it should be sufficient.
         #
         def unique_key
-          "redis_sparse_bitmap:#{SecureRandom.hex(20)}"
+          "redis:bitops:#{SecureRandom.hex(20)}"
         end
       
         def bitmap_factory

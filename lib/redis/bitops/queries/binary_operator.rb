@@ -31,10 +31,12 @@ class Redis
           lhs, *other_args = @args
           temp_intermediates = []
         
-          # Side-effects: if a temp intermediate bitmap is created, it's added to 'temp_intermediates'.
-          lhs_operand, intermediate = resolve_operand(lhs, intermediate, temp_intermediates) # Side-effect possible. 
+          # Side-effects: if a temp intermediate bitmap is created, it's added to 'temp_intermediates' 
+          # to be deleted in the "ensure" block. Marked with "<- SE".
+          
+          lhs_operand, intermediate = resolve_operand(lhs, intermediate, temp_intermediates) # <- SE
           other_operands, *_ = other_args.inject([[], intermediate]) do |(operands, intermediate), arg|
-            operand, intermediate = resolve_operand(arg, intermediate, temp_intermediates) # Side-effect possible.
+            operand, intermediate = resolve_operand(arg, intermediate, temp_intermediates) # <- SE
             [operands << operand, intermediate]
           end
         
