@@ -42,6 +42,8 @@ To use it in your code:
 
 # Usage
 
+Reference: [here](http://rdoc.info/github/bilus/redis-bitops/master/frames)
+
 ## Basic example
 
 An example is often better than theory so here's one. Let's create a few bitmaps and set their individual bits; we'll use those bitmaps in the examples below:
@@ -199,3 +201,8 @@ At this point, the calculations are carried out and the result is saved under th
 ## Transaction levels
 
 TBD
+
+
+## Contributing/feedback
+
+Please send in your suggestions to [gyamtso@gmail.com](mailto:gyamtso@gmail.com). Pull requests, issues, comments are more than welcome.
