@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'redis-bitops'
-  s.version     = '0.2'
+  s.version     = '0.2.1'
   s.summary     = "Bitmap and sparse bitmap operations for Redis."
   s.description = "Optimized operations on Redis bitmaps using built-in Ruby operators. Supports sparse bitmaps to preserve storage."
   s.authors     = ["Martin Bilski"]
@@ -12,7 +12,6 @@ Gem::Specification.new do |s|
   s.files = Dir['README.md', 'MIT-LICENSE', 'lib/**/*', 'spec/**/*']
   
   s.add_dependency 'redis'
-  s.add_dependency 'hiredis'
   
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'awesome_print'
