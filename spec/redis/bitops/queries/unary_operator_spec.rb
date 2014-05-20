@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Redis::Queries::UnaryOperator do
+describe Redis::Bitops::Queries::UnaryOperator do
   let(:a) { double("a") }
   let(:b) { double("b") }
   let(:c) { double("c") }
@@ -15,12 +15,12 @@ describe Redis::Queries::UnaryOperator do
     b.should_receive(:bitop).with(:or, c, result)
     result.should_receive(:bitop).with(:not, result)
     expr = 
-      Redis::Queries::UnaryOperator.new(:not, 
-        Redis::Queries::BinaryOperator.new(:and, 
+      Redis::Bitops::Queries::UnaryOperator.new(:not, 
+        Redis::Bitops::Queries::BinaryOperator.new(:and, 
           a, 
-          Redis::Queries::BinaryOperator.new(:and, 
-            Redis::Queries::BinaryOperator.new(:or, b, c), 
-            Redis::Queries::BinaryOperator.new(:and, d, e))))
+          Redis::Bitops::Queries::BinaryOperator.new(:and, 
+            Redis::Bitops::Queries::BinaryOperator.new(:or, b, c), 
+            Redis::Bitops::Queries::BinaryOperator.new(:and, d, e))))
     expr.optimize!
     expr.materialize(result)
   end

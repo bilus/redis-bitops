@@ -1,31 +1,10 @@
-TODO +1.5h
+TODO
 
-+ Support bitwise operators.
-+ Support nested expressions.
-+ Delete temp variables.
-+ Optimise the tree by combining operators.
-+ Extract flushall used in specs. Delete only keys with given prefix/namespace for specs.
-+ Make it possible to do $redis.sparse_bitmap(key) and $redis.bitmap(key).
-+ Get rid of <<, use assignment and lazy-resolve the expression on method_missing.
-+ Document all methods and classes.
-+ Lazy evaluation of expression to make it possible to use straight assignment.
-+ Rename the =~ operator back to more intuitive <<.
-+ Create Bitmap class sharing the specs.
-+ Extract Bitmap.
-+ Implement SparseBitmap using chunks.
-+ Make chunk size configurable.
-+ Write specs for edge conditions.
-+ Get rid of duplicate require's.
-+ Make materialization atomic (configurable).
-+ Make default chunk size configurable.
-+ Fix expression with bits set using [] after evaluation doesn't materialize the newly set bits.
-- Refactor the code. Fix the namespaces.
 
++ Refactor the code. Fix the namespaces.
 - YARD/rdoc documentation.
-
 - Benchmark with reasonably large data.
-- Make chunk size configurable but find a reasonable size.
-
+- Find a reasonable size for chunk size.
 - Write readme. 
   - Write about 3 phases: tree building, optimization, materialization.
   - <<
@@ -33,6 +12,7 @@ TODO +1.5h
   - Configuration.
 - Publish the gem.
 - Search for places where ppl might need it and brag about it.
+
 - DOCUMENT OR FIX: Correctly handle NOT so it doesn't set the extra bits. Explain why it occurs (redis byte boundary) and how it can be worked around using AND (plus maybe mention that in the field it's used it doesn't matter because NOT "from google" has to AND it with "all visitors" or otherwise it won't make sense.)
 
 

@@ -266,7 +266,7 @@ shared_examples_for "a bitmap" do |creation_method|
     
     it "is lazy-invoked when expression is evaluated" do
       result = (a & (a & b) | c & b & a)
-      result.should be_a Redis::Queries::BinaryOperator
+      result.should be_a Redis::Bitops::Queries::BinaryOperator
       @temp = result
       result.bitcount.should == 3
     end

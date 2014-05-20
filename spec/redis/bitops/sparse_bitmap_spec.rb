@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Redis::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rsb:" do
+describe Redis::Bitops::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rsb:" do
   it_should_behave_like "a bitmap", :sparse_bitmap
 
   let(:redis) { Redis.new }
@@ -95,5 +95,5 @@ describe Redis::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rsb:" do
 end
 
 describe "Redis#sparse_bitmap" do
-  it_should_behave_like "a bitmap factory method", :sparse_bitmap, Redis::SparseBitmap
+  it_should_behave_like "a bitmap factory method", :sparse_bitmap, Redis::Bitops::SparseBitmap
 end
