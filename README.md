@@ -183,21 +183,6 @@ and doesn't create any temporary keys at all!
 At this point, the calculations are carried out and the result is saved under the destination key. Note that, for sparse bitmaps, multiple keys may be created.
 
 
-+ Refactor the code. Fix the namespaces.
-+ YARD/rdoc documentation.
-- Write readme. 
-  - Write about 3 phases: tree building, optimization, materialization.
-  - <<
-  - Assignment and lazy evaluation.
-  - Configuration.
-- Publish the gem.
-- Search for places where ppl might need it and brag about it.
-
-- Benchmark with reasonably large data.
-- Find a reasonable size for chunk size.
-
-- DOCUMENT OR FIX: Correctly handle NOT so it doesn't set the extra bits. Explain why it occurs (redis byte boundary) and how it can be worked around using AND (plus maybe mention that in the field it's used it doesn't matter because NOT "from google" has to AND it with "all visitors" or otherwise it won't make sense.)
-
 ## Transaction levels
 
 TBD
