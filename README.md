@@ -25,7 +25,7 @@ Memory usage: about 20kb because it uses a sparse bitmap implementation using ch
 Let's go crazy with super-complicated expressions:
 
     ...
-    result = (b1 & ~b2) | b3 (| (b4 & b5 & b6 & ~b7))
+    result = (b1 & ~b2) | b3 (b4 | (b5 & b6 & b7 & ~b8))
     
 Imagine writing this expression using Redis#bitop!
 
