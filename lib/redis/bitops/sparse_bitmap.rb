@@ -142,7 +142,7 @@ class Redis
       
         if Redis::Bitops.configuration.transaction_level == current_level
           watched_keys = options[:watch]
-          @redis.watch(watched_keys) if watched_keys
+          @redis.watch(watched_keys) if watched_keys && watched_keys != []
           @redis.multi(&block)
         else
           block.call

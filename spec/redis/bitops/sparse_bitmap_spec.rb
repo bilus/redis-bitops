@@ -9,6 +9,7 @@ describe Redis::Bitops::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rs
   let(:a) { redis.sparse_bitmap("rsb:a", bytes_per_chunk) }
   let(:b) { redis.sparse_bitmap("rsb:b", bytes_per_chunk) }
   let(:c) { redis.sparse_bitmap("rsb:c", bytes_per_chunk) }
+  let(:empty) { redis.sparse_bitmap("rsb:empty", bytes_per_chunk) }
   let(:result) { redis.sparse_bitmap("rsb:output", bytes_per_chunk) }
 
   describe "edge cases" do
@@ -52,12 +53,22 @@ describe Redis::Bitops::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rs
         result << (a | b)
         result.bitcount.should == 5
       end
+
+      it "handles empty bitmaps" do
+        result << (empty | empty)
+        result.bitcount.should == 0
+      end
     end
   
     describe "#operator &" do 
       it "handles bits around chunk boundaries" do
         result << (a & b)
         result.bitcount.should == 3
+      end
+
+      it "handles empty bitmaps" do
+        result << (empty & empty)
+        result.bitcount.should == 0
       end
     end
   
@@ -79,6 +90,11 @@ describe Redis::Bitops::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rs
       it "handles bits around chunk boundaries" do
         result << (a ^ b)
         result.bitcount.should == 2
+      end
+
+      it "handles empty bitmaps" do
+        result << (empty ^ empty)
+        result.bitcount.should == 0
       end
     end
 
