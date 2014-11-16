@@ -10,9 +10,9 @@ Gem::Specification.new do |s|
   s.license       = 'MIT'
 
   s.files = Dir['README.md', 'MIT-LICENSE', 'lib/**/*', 'spec/**/*']
-  
+
   s.add_dependency 'redis'
-  
+
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'awesome_print'
   s.add_development_dependency 'guard-rspec'

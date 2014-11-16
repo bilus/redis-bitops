@@ -6,25 +6,25 @@ class Redis
       # Add new logical operators here as/if they become supported by Redis' BITOP command.
       #
       module TreeBuildingHelpers
-      
+
         # Logical AND operator.
         #
         def & (rhs)
           BinaryOperator.new(:and, self, rhs)
         end
-      
+
         # Logical OR operator.
         #
         def | (rhs)
           BinaryOperator.new(:or, self, rhs)
         end
-      
+
         # Logical XOR operator.
         #
         def ^ (rhs)
           BinaryOperator.new(:xor, self, rhs)
         end
-      
+
         # Logical NOT operator.
         #
         # IMPORTANT: It inverts bits padding with zeroes till the nearest byte boundary.

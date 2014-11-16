@@ -3,7 +3,7 @@ require 'forwardable'
 class Redis
   module Bitops
     module Queries
-    
+
       # Support for materializing expressions when one of the supported bitmap methods is called.
       #
       # Example
@@ -16,9 +16,9 @@ class Redis
       #
       module LazyEvaluation
         extend Forwardable
-      
+
         def_delegators :dest, :bitcount, :[], :[]=, :<<, :delete!, :root_key
-      
+
         def dest
           if @dest.nil?
             @dest = temp_bitmap
@@ -36,7 +36,7 @@ class Redis
             do_evaluate(dest_bitmap)
           end
         end
-      
+
         protected def do_evaluate(dest_bitmap)
           optimize!
           materialize(dest_bitmap)
