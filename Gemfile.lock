@@ -1,8 +1,7 @@
 PATH
   remote: .
   specs:
-    redis-bitops (0.2)
-      hiredis
+    redis-bitops (0.2.1)
       redis
 
 GEM
@@ -29,7 +28,6 @@ GEM
     guard-rspec (4.2.9)
       guard (~> 2.1)
       rspec (>= 2.14, < 4.0)
-    hiredis (0.5.2)
     listen (2.7.5)
       celluloid (>= 0.15.2)
       rb-fsevent (>= 0.9.3)
@@ -46,7 +44,7 @@ GEM
     rb-fsevent (0.9.4)
     rb-inotify (0.9.4)
       ffi (>= 0.5.0)
-    redis (3.0.7)
+    redis (3.3.0)
     rspec (2.14.1)
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
@@ -70,3 +68,6 @@ DEPENDENCIES
   pry-byebug
   redis-bitops!
   rspec
+
+BUNDLED WITH
+   1.12.5

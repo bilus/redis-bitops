@@ -21,12 +21,12 @@ Why use the library?
     result = b1 & b2
 
 Memory usage: about 20kb because it uses a sparse bitmap implementation using chunks of data.
-    
+
 Let's go crazy with super-complicated expressions:
 
     ...
     result = (b1 & ~b2) | b3 (b4 | (b5 & b6 & b7 & ~b8))
-    
+
 Imagine writing this expression using Redis#bitop!
 
 
@@ -35,7 +35,7 @@ Imagine writing this expression using Redis#bitop!
 To install the gem:
 
     gem install redis-bitops
-    
+
 To use it in your code:
 
     require 'redis/bitops'
@@ -50,19 +50,19 @@ An example is often better than theory so here's one. Let's create a few bitmaps
 
     redis = Redis.new
 
-    a = redis.bitmap("a") 
-    b = redis.bitmap("b") 
+    a = redis.bitmap("a")
+    b = redis.bitmap("b")
     result = redis.bitmap("result")
-        
+
     b[0] = true; b[2] = true; b[7] = true # 10100001
     a[0] = true; a[1] = true; a[7] = true # 11000001
 
 So, now here's a very simple expression:
 
-    c = a & b 
-    
+    c = a & b
+
 You may be surprised but the above statement does not query Redis at all! The expression is lazy-evaluated when you access the result:
-    
+
     puts c.bitcount # => 2
     puts c[0] # => true
     puts c[1] # => false
@@ -72,7 +72,7 @@ You may be surprised but the above statement does not query Redis at all! The ex
 So, in the above example, the call to `c.bitcount` happens to be the first moment when Redis is queried. The result is stored under a temporary unique key.
 
     puts c.root_key # => "redis:bitops:8eef38u9o09334"
-    
+
 Let's delete the temporary result:
 
     c.delete!
@@ -84,7 +84,7 @@ If you want to store the result directly under a specific key:
 Or, more adventurously, we can use the following more complex one-liner:
 
     result << (~c & (a | b))
-    
+
 **Note: ** expressions are optimized by reducing the number of Redis commands and using as few temporary keys to hold intermediate values as possible. See below for details.
 
 
@@ -94,17 +94,17 @@ Or, more adventurously, we can use the following more complex one-liner:
 
 You don't have to do anything special, simply use `Redis#sparse_bitmap` instead of `Redis#bitmap`:
 
-    a = redis.sparse_bitmap("a") 
-    b = redis.sparse_bitmap("b") 
+    a = redis.sparse_bitmap("a")
+    b = redis.sparse_bitmap("b")
     result = redis.sparse_bitmap("result")
-        
+
     b[0] = true; b[2] = true; b[7] = true # 10100001
     a[0] = true; a[1] = true; a[7] = true # 11000001
 
-    c = a & b 
-    
+    c = a & b
+
     result << c
-    
+
 or just:
 
     result << (a & b)
@@ -140,17 +140,17 @@ Compare:
 
     puts Benchmark.measure {
       sparse = redis.sparse_bitmap("huge_sparse_bitmap")
-      sparse[500_000_000] = true      
+      sparse[500_000_000] = true
     }
-    
-which on my machine this generates:   
-    
+
+which on my machine this generates:
+
     0.000000   0.000000   0.000000 (  0.000366)
 
 It uses just 23kb memory as opposed to 120MB (megabytes!) to store the bit using a regular Redis bitmap:
 
       regular = redis.bitmap("huge_regular_bitmap")
-      regular[500_000_000] = true      
+      regular[500_000_000] = true
 
 ## Configuration
 
@@ -170,7 +170,7 @@ Prior to evaluation, the expression is optimized by combining operators into sin
 This silly example:
 
     result << (a & b & c | a | b)
-    
+
 translates into simply:
 
     BITOP AND result a b c
