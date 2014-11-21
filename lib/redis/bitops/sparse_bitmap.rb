@@ -28,6 +28,8 @@ class Redis
         chunk_keys.each do |key|
           @redis.del(key)
         end
+        @redis.del(chunk_key_index)
+        @redis.del("#{@root_key}:tracking_chunks")
         super
       end
      
@@ -50,25 +52,37 @@ class Redis
       end
 
       def chunk_keys
-        @redis.keys("#{@root_key}:chunk:*")
+        track_chunks  unless tracking_chunks?
+        @redis.smembers chunk_key_index
       end
     
+      def sync_chunk_keys
+        @redis.keys("#{@root_key}:chunk:*").each do |key|
+          @redis.srem chunk_key_index, key  unless @redis.exists key
+        end
+      end
+
       def chunk_key(i)
-        "#{@root_key}:chunk:#{i}"
+        key = "#{@root_key}:chunk:#{i}"
+        @redis.sadd chunk_key_index, key
+        key
       end
 
       # Returns lambda creating SparseBitmap objects using @redis as the connection.
       #
       def bitmap_factory
-        lambda { |key| @redis.sparse_bitmap(key, @bytes_per_chunk) }
+        lambda do |key|
+          @redis.set "#{key}:tracking_chunks", true
+          @redis.sparse_bitmap(key, @bytes_per_chunk)
+        end
       end
-    
+
       # Copy this bitmap to 'dest' bitmap.
       #
       def copy_to(dest)
-      
+
         # Copies all source chunks to destination chunks and deletes remaining destination chunk keys.
-      
+
         source_keys = self.chunk_keys
         dest_keys = dest.chunk_keys
 
@@ -82,10 +96,21 @@ class Redis
             @redis.del(dest.chunk_key(i))
           end
         end
+        dest.sync_chunk_keys
       end
 
       protected
-    
+      def track_chunks
+        @redis.keys("#{@root_key}:chunk:*").each do |key|
+           @redis.sadd chunk_key_index, key
+        end
+        @redis.set "#{@root_key}:tracking_chunks", true
+      end
+
+      def tracking_chunks?
+        @redis.exists "#{@root_key}:tracking_chunks"
+      end
+
       def bits_per_chunk
         @bytes_per_chunk * 8
       end
@@ -106,6 +131,10 @@ class Redis
         keys.map { |key| key.split(":").last.to_i }
       end
     
+      def chunk_key_index
+        "#{@root_key}:chunk_keys"
+      end
+
       # Maybe pipeline/make atomic based on the configuration.
       #
       def maybe_multi(options = {}, &block)
