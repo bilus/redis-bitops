@@ -19,7 +19,7 @@ describe Redis::Bitops::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rs
       a[bits_per_chunk] = true
       a[2 * bits_per_chunk - 1] = true
       a[2 * bits_per_chunk] = true
-      
+
       b[0] = true
       b[bits_per_chunk] = true
       b[2 * bits_per_chunk - 1] = true
@@ -41,14 +41,14 @@ describe Redis::Bitops::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rs
           2 * bits_per_chunk])
       end
     end
-  
+
     describe "#bitcount" do
       it "handles bits around chunk boundaries" do
         a.bitcount.should == 5
       end
     end
-  
-    describe "#operator |" do 
+
+    describe "#operator |" do
       it "handles bits around chunk boundaries" do
         result << (a | b)
         result.bitcount.should == 5
@@ -59,8 +59,8 @@ describe Redis::Bitops::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rs
         result.bitcount.should == 0
       end
     end
-  
-    describe "#operator &" do 
+
+    describe "#operator &" do
       it "handles bits around chunk boundaries" do
         result << (a & b)
         result.bitcount.should == 3
@@ -71,7 +71,7 @@ describe Redis::Bitops::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rs
         result.bitcount.should == 0
       end
     end
-  
+
     describe "#operator ~" do
       it "handles bits around chunk boundaries" do
         result << (~(a & b))
@@ -85,7 +85,7 @@ describe Redis::Bitops::SparseBitmap, redis_cleanup: true, redis_key_prefix: "rs
         result[2 * bits_per_chunk].should be_true
       end
     end
-  
+
     describe "#operator ^" do
       it "handles bits around chunk boundaries" do
         result << (a ^ b)
